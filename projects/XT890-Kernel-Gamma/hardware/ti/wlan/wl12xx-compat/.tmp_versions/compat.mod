@@ -1,2 +1,0 @@
-/home/omar/Desktop/tmp/G3/XT890-Kernel-Gamma/hardware/ti/wlan/wl12xx-compat/compat/compat.ko
-/home/omar/Desktop/tmp/G3/XT890-Kernel-Gamma/hardware/ti/wlan/wl12xx-compat/compat/main.o /home/omar/Desktop/tmp/G3/XT890-Kernel-Gamma/hardware/ti/wlan/wl12xx-compat/compat/cordic.o /home/omar/Desktop/tmp/G3/XT890-Kernel-Gamma/hardware/ti/wlan/wl12xx-compat/compat/crc8.o /home/omar/Desktop/tmp/G3/XT890-Kernel-Gamma/hardware/ti/wlan/wl12xx-compat/compat/compat_atomic.o

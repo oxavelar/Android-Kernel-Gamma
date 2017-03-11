@@ -22,10 +22,11 @@
 ############################################################################
 
 export ARCH := i386
+export ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 ifneq ($(wildcard /usr/bin/gcc-4.8-NONE),)
   export CC := /usr/bin/gcc-4.8
 else
-  export CROSS_COMPILE := $(PWD)/gcc/i686-linux-android-4.7/bin/i686-linux-android-
+  export CROSS_COMPILE := $(ROOT_DIR)/gcc/i686-linux-android-4.7/bin/i686-linux-android-
 endif
 export KBUILD_VERBOSE := 0
 
@@ -34,9 +35,9 @@ export KBUILD_VERBOSE := 0
 ############################################################################
 
 KDEFCONFIG = $(ARCH)_mfld_oxavelar_defconfig
-KSRC_PATH = $(PWD)/kernel/
-WL12XX_SRC_PATH = $(PWD)/hardware/ti/wlan/wl12xx-compat
-OUT_PATH = $(PWD)/out
+KSRC_PATH = $(ROOT_DIR)/kernel/
+WL12XX_SRC_PATH = $(ROOT_DIR)/hardware/ti/wlan/wl12xx-compat
+OUT_PATH = $(ROOT_DIR)/out
 KBUILD_OUT_PATH = $(OUT_PATH)/kbuild
 MBUILD_OUT_PATH = $(OUT_PATH)/mbuild
 
@@ -115,16 +116,16 @@ BOOT_CMDLINE="init=/init pci=noearly console=logk0 vmalloc=272M earlyprintk=nolo
 .PHONY: bootimage
 bootimage: kernel modules
 	rm -fR "/tmp/smi-ramdisk"
-	cp -R "$(PWD)/root" "/tmp/smi-ramdisk"
+	cp -R "$(ROOT_DIR)/root" "/tmp/smi-ramdisk"
 	mkdir -p "/tmp/smi-ramdisk/lib/modules"
 	# Copy the created modules to the ramdisk path and strip debug symbols
 	find "$(MBUILD_OUT_PATH)" -iname *.ko -exec cp -f \{\} "/tmp/smi-ramdisk/lib/modules/" \;
 	find "$(WL12XX_SRC_PATH)" -iname *.ko -exec cp -f \{\} "/tmp/smi-ramdisk/lib/modules/" \;
 	strip --strip-debug --strip-unneeded --remove-section=.comment --remove-section=.note /tmp/smi-ramdisk/lib/modules/*.*o
-	"$(PWD)/tools/pack-ramdisk" "/tmp/smi-ramdisk"
+	"$(ROOT_DIR)/tools/pack-ramdisk" "/tmp/smi-ramdisk"
 	mv "/tmp/ramdisk.cpio.gz" "$(OUT_PATH)/ramdisk.cpio.gz"
 	# Pack the boot.img
-	"$(PWD)/tools/mkbootimg" --kernel "$(OUT_PATH)/kernel" \
+	"$(ROOT_DIR)/tools/mkbootimg" --kernel "$(OUT_PATH)/kernel" \
 	 --ramdisk "$(OUT_PATH)/ramdisk.cpio.gz"               \
 	 --cmdline $(BOOT_CMDLINE) --output "$(OUT_PATH)"
 

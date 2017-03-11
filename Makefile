@@ -18,7 +18,7 @@
 ########################## GLOBAL MAKE ARGUMENTS ###########################
 ############################################################################
 
-export PROJECT := D85X-Kernel-Gamma
+export PROJECT := XT890-Kernel-Gamma
 
 ############################################################################
 ##################### LOCAL SETUP AND FILE STRUCTURES ######################
@@ -33,19 +33,17 @@ KSRC_HTTP = $(REPO_HTTP)/$(PROJECT)
 ########################### KERNEL BUILD STEPS #############################
 ############################################################################
 
-.PHONE: picker
-picker:
-    export PROJECT := D85X-Kernel-Gamma
-
-.PHONY: clone
-clone:
-    git clone $(KSRC_HTTP) $(KSRC_PATH)
-
 .PHONY: kernel
 kernel: picker
-	$(MAKE) -f $(PROJ_PATH)/Makefile
+	$(MAKE) -C $(PROJ_PATH) MAKEFLAGS=
+	mv -avf $(PROJ_PATH)/out $(PWD)/out
 
 .PHONY: clean
-clean: picker
-	$(MAKE) -f $(PROJ_PATH)/Makefile clean
+clean:
+	$(MAKE) -C $(PROJ_PATH) MAKEFLAGS= clean
+
+.PHONY: picker
+picker:
+	#export PROJECT := XT890-Kernel-Gamma
+	git clone $(KSRC_HTTP) $(KSRC_PATH) || continue
 

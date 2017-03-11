@@ -37,10 +37,11 @@
 ############################################################################
 
 export ARCH := arm
+export ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 ifneq ($(wildcard /usr/bin/arm-none-eabi-disabled),)
     export CROSS_COMPILE := /usr/bin/arm-none-eabi-
 else
-    export CROSS_COMPILE := $(PWD)/gcc/uber-arm-eabi-6.x/bin/arm-eabi-
+    export CROSS_COMPILE := $(ROOT_DIR)/gcc/uber-arm-eabi-6.x/bin/arm-eabi-
 endif
 export KBUILD_VERBOSE := 0
 
@@ -49,8 +50,8 @@ export KBUILD_VERBOSE := 0
 ############################################################################
 
 KDEFCONFIG := lineageos_d855_oxavelar_defconfig
-KSRC_PATH = $(PWD)/kernel/
-OUT_PATH := $(PWD)/out
+KSRC_PATH = $(ROOT_DIR)/kernel/
+OUT_PATH := $(ROOT_DIR)/out
 KBUILD_OUT_PATH = $(OUT_PATH)/kbuild
 MBUILD_OUT_PATH = $(OUT_PATH)/mbuild
 DBUILD_OUT_PATH = $(OUT_PATH)/dbuild
@@ -147,7 +148,7 @@ dtb:
 	mkdir -p "$(DBUILD_OUT_PATH)"
 	$(MAKE) -C "$(KSRC_PATH)" O="$(DBUILD_OUT_PATH)" "$(KDEFCONFIG)"
 	$(MAKE) -C "$(KSRC_PATH)" O="$(DBUILD_OUT_PATH)" KCFLAGS+="$(KCFLAGS)" dtbs
-	"$(PWD)/tools/dtbToolCM" -s 2048 -d "qcom,msm-id = <" -o "$(OUT_PATH)/dt.img" -p "$(DBUILD_OUT_PATH)/scripts/dtc/" "$(DBUILD_OUT_PATH)/arch/$(ARCH)/boot/"
+	"$(ROOT_DIR)/tools/dtbToolCM" -s 2048 -d "qcom,msm-id = <" -o "$(OUT_PATH)/dt.img" -p "$(DBUILD_OUT_PATH)/scripts/dtc/" "$(DBUILD_OUT_PATH)/arch/$(ARCH)/boot/"
 	cp -f "$(OUT_PATH)/dt.img" "$(OUT_PATH)/dtb"
 
 .PHONY: clean
