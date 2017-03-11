@@ -1,0 +1,15 @@
+--- arch/arm/mm/mmu.c
++++ arch/arm/mm/mmu.c
+@@ -978,7 +978,12 @@ static void * __initdata vmalloc_min =
+  */
+ static int __init early_vmalloc(char *arg)
+ {
++#ifdef CONFIG_MACH_MSM8974_G3
++    /* Override the argument to be 256M on LGE G3 */
++	unsigned long vmalloc_reserve = memparse("256M", NULL);
++#else
+ 	unsigned long vmalloc_reserve = memparse(arg, NULL);
++#endif
+ 
+ 	if (vmalloc_reserve < SZ_16M) {
+ 		vmalloc_reserve = SZ_16M;

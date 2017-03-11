@@ -1,0 +1,227 @@
+--- drivers/devfreq/Kconfig
++++ drivers/devfreq/Kconfig
+@@ -71,6 +71,15 @@ config DEVFREQ_GOV_MSM_ADRENO_TZ
+ 	  Sets the frequency using a "on-demand" algorithm.
+ 	  This governor is unlikely to be useful for other devices.
+ 
++config ADRENO_IDLER
++	tristate "MSM Adreno idler"
++	depends on DEVFREQ_GOV_MSM_ADRENO_TZ
++	help
++	  Uses a different calculation method on top of Adreno TZ
++	  just for calculating frequency for idle to reduce the
++	  wasted power coming from stock Adreno TZ while
++	  maintaining high-performance.
++
+ config DEVFREQ_GOV_MSM_CPUFREQ
+ 	bool "MSM CPUfreq"
+ 	depends on CPU_FREQ_MSM
+
+--- drivers/devfreq/Makefile
++++ drivers/devfreq/Makefile
+@@ -4,6 +4,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PERFORMANCE)	+= governor_performance.o
+ obj-$(CONFIG_DEVFREQ_GOV_POWERSAVE)	+= governor_powersave.o
+ obj-$(CONFIG_DEVFREQ_GOV_USERSPACE)	+= governor_userspace.o
+ obj-$(CONFIG_DEVFREQ_GOV_MSM_ADRENO_TZ)	+= governor_msm_adreno_tz.o
++obj-$(CONFIG_ADRENO_IDLER)		+= adreno_idler.o
+ obj-$(CONFIG_DEVFREQ_GOV_MSM_CPUFREQ)	+= governor_msm_cpufreq.o
+ obj-$(CONFIG_DEVFREQ_GOV_MSM_CPUBW_HWMON)	+= governor_cpubw_hwmon.o
+ 
+--- /dev/null
++++ drivers/devfreq/adreno_idler.c
+@@ -0,0 +1,133 @@
++/*
++ * Author: Park Ju Hyung aka arter97 <qkrwngud825@gmail.com>
++ *
++ * Copyright 2015 Park Ju Hyung
++ *
++ * This software is licensed under the terms of the GNU General Public
++ * License version 2, as published by the Free Software Foundation, and
++ * may be copied, distributed, and modified under those terms.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ */
++
++/*
++ * Adreno idler - Idling algorithm,
++ * an efficient workaround for msm-adreno-tz's overheads.
++ *
++ * Main goal is to lower the power consumptions while maintaining high-performance.
++ *
++ * Since msm-adreno-tz tends to *not* use the lowest frequency even on idle,
++ * Adreno idler replaces msm-adreno-tz's algorithm when it comes to
++ * calculating idle frequency(mostly by ondemand's method).
++ * The higher frequencies are not touched with this algorithm, so high-demanding
++ * games will (most likely) not suffer from worsened performance.
++ */
++
++#include <linux/module.h>
++#include <linux/devfreq.h>
++#include <linux/msm_adreno_devfreq.h>
++#include "adreno_idler.h"
++
++#define ADRENO_IDLER_MAJOR_VERSION 1
++#define ADRENO_IDLER_MINOR_VERSION 1
++
++extern int devfreq_get_freq_level(struct devfreq *devfreq, unsigned long freq);
++
++/* stats.busy_time threshold for determining if the given workload is idle.
++   Any workload higher than this will be treated as a non-idle workload.
++   Adreno idler will more actively try to ramp down the frequency
++   if this is set to a higher value. */
++static unsigned long idleworkload = 5000;
++module_param_named(adreno_idler_idleworkload, idleworkload, ulong, 0664);
++
++/* Number of events to wait before ramping down the frequency.
++   The idlewait'th events before current one must be all idle before
++   Adreno idler ramps down the frequency.
++   This implementation is to prevent micro-lags on scrolling or playing games.
++   Adreno idler will more actively try to ramp down the frequency
++   if this is set to a lower value. */
++static unsigned int idlewait = 20;
++module_param_named(adreno_idler_idlewait, idlewait, uint, 0664);
++
++/* Taken from ondemand */
++static unsigned int downdifferential = 20;
++module_param_named(adreno_idler_downdifferential, downdifferential, uint, 0664);
++
++/* Master switch to activate the whole routine */
++bool adreno_idler_active = true;
++module_param_named(adreno_idler_active, adreno_idler_active, bool, 0664);
++
++static unsigned int idlecount = 0;
++
++int adreno_idler(struct devfreq_dev_status stats, struct devfreq *devfreq,
++		 unsigned long *freq)
++{
++	unsigned long cur_freq;
++	int freq_level;
++
++	if (!adreno_idler_active)
++		return 0;
++
++	devfreq->profile->get_cur_freq(devfreq->dev.parent, &cur_freq);
++	freq_level = devfreq_get_freq_level(devfreq, cur_freq);
++
++	/* 1. Idler will not be applied with highest freq level */
++	/* 2. Define another threshold (idleworkload * 0.75) for lowest freq level to turnover */
++	if (freq_level == 0 ||
++		(freq_level == (devfreq->profile->max_state - 1) && stats.busy_time > (idleworkload * 3 / 4))) {
++		idlecount = 0;
++		return 0;
++	}
++
++	if (stats.busy_time < idleworkload) {
++		/* busy_time >= idleworkload should be considered as a non-idle workload. */
++		idlecount++;
++		if (*freq == devfreq->profile->freq_table[devfreq->profile->max_state - 1]) {
++			/* Frequency is already at its lowest.
++			   No need to calculate things, so bail out. */
++			return 1;
++		}
++		if (idlecount >= idlewait &&
++		    stats.busy_time * 100 < stats.total_time * downdifferential) {
++			/* We are idle for (idlewait + 1)'th time! Ramp down the frequency now. */
++			/* If we're not at lowest freq, then we step one level down */
++			if (freq_level <  (devfreq->profile->max_state - 1)) {
++				*freq = devfreq->profile->freq_table[freq_level + 1];
++				idlecount = 0;
++				return 1;
++			}
++		}
++	} else {
++		idlecount = 0;
++		/* Do not return 1 here and allow rest of the algorithm to
++		   figure out the appropriate frequency for current workload.
++		   It can even set it back to the lowest frequency. */
++	}
++	return 0;
++}
++EXPORT_SYMBOL(adreno_idler);
++
++static int __init adreno_idler_init(void)
++{
++	pr_info("adreno_idler: version %d.%d by arter97\n",
++		 ADRENO_IDLER_MAJOR_VERSION,
++		 ADRENO_IDLER_MINOR_VERSION);
++
++	return 0;
++}
++subsys_initcall(adreno_idler_init);
++
++static void __exit adreno_idler_exit(void)
++{
++	return;
++}
++module_exit(adreno_idler_exit);
++
++MODULE_AUTHOR("Park Ju Hyung <qkrwngud825@gmail.com>");
++MODULE_DESCRIPTION("'adreno_idler - A powersaver for Adreno TZ"
++	"Control idle algorithm for Adreno GPU series");
++MODULE_LICENSE("GPL");
+
+--- /dev/null
++++ drivers/devfreq/adreno_idler.h
+@@ -0,0 +1,8 @@
++#ifndef _ADRENO_IDLER_H
++#define _ADRENO_IDLER_H
++
++extern bool adreno_idler_active;
++extern int adreno_idler(struct devfreq_dev_status stats, struct devfreq *devfreq,
++		 unsigned long *freq);
++
++#endif /* _ADRENO_IDLER_H */
+
+--- drivers/devfreq/devfreq.c
++++ drivers/devfreq/devfreq.c
+@@ -1078,7 +1078,9 @@ static int __init devfreq_init(void)
+ 		return PTR_ERR(devfreq_class);
+ 	}
+ 
+-	devfreq_wq = create_freezable_workqueue("devfreq_wq");
++	devfreq_wq = alloc_workqueue("devfreq_wq",
++									WQ_HIGHPRI | WQ_UNBOUND | WQ_FREEZABLE |
++									WQ_MEM_RECLAIM, 0);
+ 	if (IS_ERR(devfreq_wq)) {
+ 		class_destroy(devfreq_class);
+ 		pr_err("%s: couldn't create workqueue\n", __FILE__);
+
+--- drivers/devfreq/governor_msm_adreno_tz.c
++++ drivers/devfreq/governor_msm_adreno_tz.c
+@@ -21,6 +21,9 @@
+ #include <linux/msm_adreno_devfreq.h>
+ #include <mach/scm.h>
+ #include "governor.h"
++#ifdef CONFIG_ADRENO_IDLER
++#include "adreno_idler.h"
++#endif
+ 
+ static DEFINE_SPINLOCK(tz_lock);
+ 
+@@ -102,8 +105,22 @@ static int tz_get_target_freq(struct devfreq *devfreq, unsigned long *freq,
+ 		return result;
+ 	}
+ 
++	/* Prevent overflow */
++	if (stats.busy_time >= (1 << 24) || stats.total_time >= (1 << 24)) {
++		stats.busy_time >>= 7;
++		stats.total_time >>= 7;
++	}
++
+ 	*freq = stats.current_frequency;
+ 	*flag = 0;
++
++#ifdef CONFIG_ADRENO_IDLER
++	if (adreno_idler(stats, devfreq, freq)) {
++		/* adreno_idler has asked to bail out now */
++		return 0;
++	}
++#endif
++
+ 	priv->bin.total_time += stats.total_time;
+ 	priv->bin.busy_time += stats.busy_time;
+ 	if (priv->bus.num) {
