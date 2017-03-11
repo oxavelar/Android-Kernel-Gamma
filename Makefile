@@ -36,7 +36,7 @@ KSRC_HTTP = $(REPO_HTTP)/$(PROJECT)
 .PHONY: kernel
 kernel: picker
 	$(MAKE) -C $(PROJ_PATH)
-	mv -avf $(PROJ_PATH)/out $(PWD)/out
+	mv -vf $(PROJ_PATH)/out $(PWD)/out
 
 .PHONY: clean
 clean:
