@@ -18,7 +18,7 @@
 ########################## GLOBAL MAKE ARGUMENTS ###########################
 ############################################################################
 
-export PROJECT := XT890-Kernel-Gamma
+export PROJECT := D85X-Kernel-Gamma
 
 ############################################################################
 ##################### LOCAL SETUP AND FILE STRUCTURES ######################
@@ -44,6 +44,5 @@ clean:
 
 .PHONY: picker
 picker:
-	#export PROJECT := XT890-Kernel-Gamma
 	git clone $(KSRC_HTTP) $(KSRC_PATH) || continue
 
