@@ -4,6 +4,3 @@
 [submodule "/home/omar/Desktop/Android-Kernel-Gamma/projects/D85X-Kernel-Gamma/kernel"]
 	path = /home/omar/Desktop/Android-Kernel-Gamma/projects/D85X-Kernel-Gamma/kernel
 	url = https://github.com/oxavelar//D85X-Kernel-Gamma
-[submodule "/home/omar/Desktop/Android-Kernel-Gamma/projects/D85X-Kernel-GammaV2/kernel"]
-	path = /home/omar/Desktop/Android-Kernel-Gamma/projects/D85X-Kernel-GammaV2/kernel
-	url = https://github.com/oxavelar//D85X-Kernel-GammaV2
