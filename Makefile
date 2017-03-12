@@ -10,8 +10,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Makefile to pick from the different available projects that can be used from
-# to compile a working kernel image
+# Makefile to pick from the different available projects that can be used
+# from my GitHub to compile a working kernel image for various phones.
+#
 
 
 ############################################################################
@@ -44,5 +45,5 @@ clean:
 
 .PHONY: picker
 picker:
-	git clone $(KSRC_HTTP) $(KSRC_PATH) || continue
+	git submodule add $(KSRC_HTTP) $(KSRC_PATH) || continue
 
