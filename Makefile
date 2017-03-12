@@ -19,7 +19,7 @@
 ########################## GLOBAL MAKE ARGUMENTS ###########################
 ############################################################################
 
-export PROJECT := D85X-Kernel-Gamma
+export PROJECT := XT890-Kernel-Gamma
 
 ############################################################################
 ##################### LOCAL SETUP AND FILE STRUCTURES ######################
@@ -44,6 +44,12 @@ clean:
 	$(MAKE) -C $(PROJ_PATH) clean
 
 .PHONY: picker
-picker:
-	git submodule add $(KSRC_HTTP) $(KSRC_PATH) || continue
+picker: gitprep
+	echo "Select from the list of available projects:"
+
+.PHONY: gitprep
+ifeq ($(wildcard $(KSRC_PATH)/*),)
+	git rm -rf --cached $(KSRC_PATH) || continue
+	git submodule add $(KSRC_HTTP) $(KSRC_PATH)
+endif
 
