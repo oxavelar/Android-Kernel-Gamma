@@ -35,7 +35,7 @@ KSRC_HTTP = $(REPO_HTTP)/$(PROJECT)
 ############################################################################
 
 .PHONY: kernel
-kernel: picker
+kernel: menu
 	$(MAKE) -C $(PROJ_PATH)
 	mv -vf $(PROJ_PATH)/out $(PWD)/out
 
@@ -44,6 +44,7 @@ clean:
 	$(MAKE) -C $(PROJ_PATH) clean
 
 .PHONY: picker
+menu:
 ifeq ($(wildcard $(KSRC_PATH)/.*),)
 	git rm -rf --cached $(KSRC_PATH) || continue
 	git submodule add $(KSRC_HTTP) $(KSRC_PATH)
