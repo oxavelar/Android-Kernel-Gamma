@@ -41,7 +41,7 @@ export ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 ifneq ($(wildcard /usr/bin/arm-none-eabi-disabled),)
     export CROSS_COMPILE := /usr/bin/arm-none-eabi-
 else
-    export CROSS_COMPILE := $(ROOT_DIR)/gcc/uber-arm-eabi-6.x/bin/arm-eabi-
+    export CROSS_COMPILE := $(ROOT_DIR)/gcc/linaro-6.3/bin/arm-eabi-
 endif
 export KBUILD_VERBOSE := 0
 
