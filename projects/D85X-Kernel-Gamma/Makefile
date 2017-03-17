@@ -67,7 +67,7 @@ export QCOM_S801 := \
         -mfpu=neon-vfpv4 \
         -mvectorize-with-neon-quad \
         -mno-unaligned-access \
-        --param l1-cache-line-size=32 \
+        --param l1-cache-line-size=64 \
         --param l1-cache-size=16 \
         --param l2-cache-size=2048 \
 
@@ -81,7 +81,6 @@ export GRAPHTIE_FLAGS := \
 export KCFLAGS := \
         -pipe \
         -O3 \
-        -fno-pic \
         -fomit-frame-pointer \
         -ftree-vectorize \
         -ftree-slp-vectorize \
