@@ -41,7 +41,7 @@ export ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 ifneq ($(wildcard /usr/bin/arm-none-eabi-disabled),)
     export CROSS_COMPILE := /usr/bin/arm-none-eabi-
 else
-    export CROSS_COMPILE := $(ROOT_DIR)/gcc/linaro-6.3/bin/arm-eabi-
+    export CROSS_COMPILE := $(ROOT_DIR)/gcc/linaro-6.3/bin/aarch64-elf-
 endif
 export KBUILD_VERBOSE := 0
 
@@ -62,11 +62,8 @@ DBUILD_OUT_PATH = $(OUT_PATH)/dbuild
 ############################################################################
 
 export QCOM_S820 := \
-        -march=armv8-a+crc \
+        -march=armv8-a+crc+crypto \
         -mtune=cortex-a53 \
-        -mfpu=crypto-neon-fp-armv8 \
-        -mvectorize-with-neon-quad \
-        -mno-unaligned-access \
         --param l1-cache-line-size=64 \
         --param l1-cache-size=32 \
         --param l2-cache-size=512 \
@@ -126,11 +123,11 @@ export KCFLAGS += -Wno-array-bounds
 ############################################################################
 
 .PHONY: kernel
-kernel: dtb
+kernel:
 	mkdir -p "$(KBUILD_OUT_PATH)"
 	$(MAKE) -C "$(KSRC_PATH)" O="$(KBUILD_OUT_PATH)" "$(KDEFCONFIG)"
-	$(MAKE) -C "$(KSRC_PATH)" O="$(KBUILD_OUT_PATH)" CONFIG_NO_ERROR_ON_MISMATCH=y CONFIG_DEBUG_SECTION_MISMATCH=y KCFLAGS+="$(KCFLAGS)" zImage
-	cp -f "$(KBUILD_OUT_PATH)/arch/$(ARCH)/boot/zImage" "$(OUT_PATH)/zImage"
+	$(MAKE) -C "$(KSRC_PATH)" O="$(KBUILD_OUT_PATH)" CONFIG_NO_ERROR_ON_MISMATCH=y CONFIG_DEBUG_SECTION_MISMATCH=y KCFLAGS+="$(KCFLAGS)" Image.gz-dtb
+	cp -f "$(KBUILD_OUT_PATH)/arch/$(ARCH)/boot/Image.gz-dtb" "$(OUT_PATH)/Image.gz-dtb"
 
 .PHONY: modules
 modules:
@@ -141,14 +138,6 @@ modules:
 	# Copy the created modules to the ramdisk path and strip debug symbols
 	find "$(MBUILD_OUT_PATH)" -iname *.ko -exec cp -f \{\} "$(OUT_PATH)/lib/modules/" \;
 	strip --strip-debug --strip-unneeded --remove-section=.comment --remove-section=.note "$(OUT_PATH)/lib/modules/*.*o"
-
-.PHONY: dtb
-dtb:
-	mkdir -p "$(DBUILD_OUT_PATH)"
-	$(MAKE) -C "$(KSRC_PATH)" O="$(DBUILD_OUT_PATH)" "$(KDEFCONFIG)"
-	$(MAKE) -C "$(KSRC_PATH)" O="$(DBUILD_OUT_PATH)" KCFLAGS+="$(KCFLAGS)" dtbs
-	"$(ROOT_DIR)/tools/dtbToolCM" -s 2048 -d "qcom,msm-id = <" -o "$(OUT_PATH)/dt.img" -p "$(DBUILD_OUT_PATH)/scripts/dtc/" "$(DBUILD_OUT_PATH)/arch/$(ARCH)/boot/"
-	cp -f "$(OUT_PATH)/dt.img" "$(OUT_PATH)/dtb"
 
 .PHONY: clean
 clean:
