@@ -36,7 +36,7 @@
 ########################## GLOBAL MAKE ARGUMENTS ###########################
 ############################################################################
 
-export ARCH := arm
+export ARCH := arm64
 export ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 ifneq ($(wildcard /usr/bin/arm-none-eabi-disabled),)
     export CROSS_COMPILE := /usr/bin/arm-none-eabi-
@@ -49,7 +49,7 @@ export KBUILD_VERBOSE := 0
 ##################### LOCAL SETUP AND FILE STRUCTURES ######################
 ############################################################################
 
-KDEFCONFIG := lineageos_d855_oxavelar_defconfig
+KDEFCONFIG := lineageos_us996_defconfig
 KSRC_PATH = $(ROOT_DIR)/kernel/
 OUT_PATH := $(ROOT_DIR)/out
 KBUILD_OUT_PATH = $(OUT_PATH)/kbuild
@@ -62,7 +62,7 @@ DBUILD_OUT_PATH = $(OUT_PATH)/dbuild
 ############################################################################
 
 export QCOM_S820 := \
-        -march=armv8-a+crc+crypto \
+        -march=armv8-a+crc \
         -mtune=cortex-a53 \
         -mfpu=crypto-neon-fp-armv8 \
         -mvectorize-with-neon-quad \
