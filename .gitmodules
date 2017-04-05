@@ -4,12 +4,6 @@
 [submodule "/home/omar/Desktop/Android-Kernel-Gamma/projects/D85X-Kernel-Gamma/kernel"]
 	path = /home/omar/Desktop/Android-Kernel-Gamma/projects/D85X-Kernel-Gamma/kernel
 	url = https://github.com/oxavelar//D85X-Kernel-Gamma
-[submodule "/home/omar/Desktop/tmp/Android-Kernel-Gamma/projects/XT890-Kernel-Gamma/kernel"]
-	path = /home/omar/Desktop/tmp/Android-Kernel-Gamma/projects/XT890-Kernel-Gamma/kernel
-	url = https://github.com/oxavelar//XT890-Kernel-Gamma
-[submodule "/home/omar/Desktop/tmp/Android-Kernel-Gamma/projects/D85X-Kernel-Gamma/kernel"]
-	path = /home/omar/Desktop/tmp/Android-Kernel-Gamma/projects/D85X-Kernel-Gamma/kernel
-	url = https://github.com/oxavelar//D85X-Kernel-Gamma
 [submodule "/home/omar/Desktop/tmp/Android-Kernel-Gamma/projects/V20-Kernel-Gamma/kernel"]
 	path = /home/omar/Desktop/tmp/Android-Kernel-Gamma/projects/V20-Kernel-Gamma/kernel
 	url = https://github.com/oxavelar//V20-Kernel-Gamma
