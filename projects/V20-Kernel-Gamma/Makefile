@@ -108,15 +108,8 @@ export KCFLAGS := \
 export KCFLAGS += -Wno-maybe-uninitialized
 export LDFLAGS += -O1 --hash-style=gnu --as-needed
 
-export KCFLAGS += -Wno-unused-const-variable
-export KCFLAGS += -Wno-misleading-indentation
-export KCFLAGS += -Wno-bool-compare
-export KCFLAGS += -Wno-shift-overflow
-export KCFLAGS += -Wno-tautological-compare
-export KCFLAGS += -Wno-duplicate-decl-specifier
-export KCFLAGS += -Wno-switch-unreachable
 export KCFLAGS += -Wno-array-bounds
-
+export KCFLAGS += -fno-use-linker-plugin
 
 ############################################################################
 ########################### KERNEL BUILD STEPS #############################
