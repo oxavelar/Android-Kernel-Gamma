@@ -126,11 +126,11 @@ export KCFLAGS += -Wno-array-bounds
 ############################################################################
 
 .PHONY: kernel
-kernel:
+kernel: dtb
 	mkdir -p "$(KBUILD_OUT_PATH)"
 	$(MAKE) -C "$(KSRC_PATH)" O="$(KBUILD_OUT_PATH)" "$(KDEFCONFIG)"
-	$(MAKE) -C "$(KSRC_PATH)" O="$(KBUILD_OUT_PATH)" CONFIG_NO_ERROR_ON_MISMATCH=y CONFIG_DEBUG_SECTION_MISMATCH=y KCFLAGS+="$(KCFLAGS)" zImage-dtb
-	cp -f "$(KBUILD_OUT_PATH)/arch/$(ARCH)/boot/zImage-dtb" "$(OUT_PATH)/zImage-dtb"
+	$(MAKE) -C "$(KSRC_PATH)" O="$(KBUILD_OUT_PATH)" CONFIG_NO_ERROR_ON_MISMATCH=y CONFIG_DEBUG_SECTION_MISMATCH=y KCFLAGS+="$(KCFLAGS)" zImage
+	cp -f "$(KBUILD_OUT_PATH)/arch/$(ARCH)/boot/zImage" "$(OUT_PATH)/zImage"
 
 .PHONY: modules
 modules:
