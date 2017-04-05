@@ -49,7 +49,7 @@ export KBUILD_VERBOSE := 0
 ##################### LOCAL SETUP AND FILE STRUCTURES ######################
 ############################################################################
 
-KDEFCONFIG := lineageos_us996_defconfig
+KDEFCONFIG := lineageos_us996_oxavelar_defconfig
 KSRC_PATH = $(ROOT_DIR)/kernel/
 OUT_PATH := $(ROOT_DIR)/out
 KBUILD_OUT_PATH = $(OUT_PATH)/kbuild
@@ -108,6 +108,8 @@ export KCFLAGS := \
 export KCFLAGS += -Wno-maybe-uninitialized
 export LDFLAGS += -O1 --hash-style=gnu --as-needed
 
+export KCFLAGS += -Wno-misleading-indentation
+export KCFLAGS += -Wno-tautological-compare
 export KCFLAGS += -Wno-array-bounds
 export KCFLAGS += -fno-use-linker-plugin
 
