@@ -78,6 +78,7 @@ export GRAPHTIE_FLAGS := \
 export KCFLAGS := \
         -pipe \
         -O3 \
+        -flto \
         -fomit-frame-pointer \
         -ftree-vectorize \
         -ftree-slp-vectorize \
@@ -106,7 +107,7 @@ export KCFLAGS := \
         $(GRAPHITE_FLAGS) \
 
 export KCFLAGS += -Wno-maybe-uninitialized
-export LDFLAGS += -O1 --hash-style=gnu --as-needed
+export LDFLAGS += -O3 --hash-style=gnu --as-needed -flto
 
 export KCFLAGS += -Wno-misleading-indentation
 export KCFLAGS += -Wno-tautological-compare
