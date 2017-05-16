@@ -1,0 +1,167 @@
+Patch:  MSM8996 User Voltage Scaling that does not depend on qcom-cpufreq.c
+Author: Omar Avelar
+
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 2da32aff486..ce3b63f3289 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -332,6 +332,12 @@ config ARCH_MSM8996
+ 	  This enables support for the MSM8996 chipset. If you don't
+ 	  know what to do here, say N
+ 
++config CPU_VOLTAGE_TABLE
++	bool "Enable CPU Voltage Table via sysfs for adjustments"
++	default n
++	help
++	  Kyro User Voltage Control. Sysfs can be used to override.
++
+ config ARCH_MSMCOBALT
+ 	bool "Enable Support for Qualcomm MSMCOBALT"
+ 	depends on ARCH_MSM
+diff --git a/drivers/clk/msm/clock-cpu-8996.c b/drivers/clk/msm/clock-cpu-8996.c
+index 0e4c11844c4..b2b2bad1c62 100644
+--- a/drivers/clk/msm/clock-cpu-8996.c
++++ b/drivers/clk/msm/clock-cpu-8996.c
+@@ -28,6 +28,10 @@
+ #include <linux/pm_opp.h>
+ #include <linux/pm_qos.h>
+ 
++#ifdef CONFIG_CPU_VOLTAGE_TABLE
++#include <linux/cpufreq.h>
++#endif
++
+ #include <asm/cputype.h>
+ 
+ #include <soc/qcom/scm.h>
+@@ -1066,6 +1070,95 @@ static struct clk_lookup cpu_clocks_8996[] = {
+ 	CLK_LIST(cpu_debug_mux),
+ };
+ 
++#ifdef CONFIG_CPU_VOLTAGE_TABLE
++
++#define CPU_VDD_MIN	400
++#define CPU_VDD_MAX	900
++
++static unsigned int cnt;
++
++static bool is_used_by_scaling(unsigned int freq, unsigned int cpu_nr)
++{
++	struct cpufreq_frequency_table *pos, *table;
++ 	table = cpufreq_frequency_get_table(cpu_nr);
++
++	for (pos = table; pos->frequency != CPUFREQ_TABLE_END; pos++) {
++		if (pos->frequency == freq)
++			return true;
++	}
++	return false;
++}
++
++ssize_t show_UV_mV_table(struct cpufreq_policy *policy, char *buf)
++{
++	int i;
++	ssize_t len = 0;
++
++	int cpu = policy->cpu;
++	struct clk *cpu_clk = logical_cpu_to_clk(cpu);
++	int num_levels = cpu_clk->vdd_class->num_levels;
++
++	/* Format UV_mv table */
++	for (i = 0; i < num_levels; i++) {
++
++		/* Skip the value if this is un-used by the cpu governor */
++		if (!is_used_by_scaling(cpu_clk->fmax[i] / 1000, cpu))
++				continue;
++
++		/* Read the frequency and microvolt pairs from the clk struct */
++		len += sprintf(buf + len, "%lu MHz : %u mV\n", cpu_clk->fmax[i] / 1000000,
++						cpu_clk->vdd_class->vdd_uv[i] / 1000);
++
++	}
++
++	return len;
++}
++
++ssize_t store_UV_mV_table(struct cpufreq_policy *policy, char *buf,	size_t count)
++{
++	int i;
++	ssize_t ret = 0;
++	unsigned int val;
++	char size_cur[16];
++
++	int cpu = policy->cpu;
++	struct clk *cpu_clk = logical_cpu_to_clk(cpu);
++	int num_levels = cpu_clk->vdd_class->num_levels;
++
++	if (cnt) {
++		cnt = 0;
++		return -EINVAL;
++	}
++
++	for (i = 0; i < num_levels; i++) {
++
++		ret = sscanf(buf, "%u", &val);
++		if (!ret)
++			return -EINVAL;
++
++		/* Skip the value if this is un-used by the cpu governor */
++		if (!is_used_by_scaling(cpu_clk->fmax[i] / 1000, cpu))
++				continue;
++
++		/* Bounds check */
++		val = min( max((unsigned int)val, (unsigned int)CPU_VDD_MIN), (unsigned int)CPU_VDD_MAX );
++
++		/* Undervolt value is applied to the per cpu clock */
++		cpu_clk->vdd_class->vdd_uv[i] = val * 1000;
++
++		/* Non-standard sysfs interface: advance buf */
++		ret = sscanf(buf, "%s", size_cur);
++		cnt = strlen(size_cur);
++		buf += cnt + 1;
++
++	}
++
++	pr_warn("clock-cpu-8996: User voltage table modified\n"); 
++
++	return ret;
++}
++#endif
++
+ static int of_get_fmax_vdd_class(struct platform_device *pdev, struct clk *c,
+ 								char *prop_name)
+ {
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index b373c62dc32..3c20a602c85 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -841,6 +841,11 @@ static ssize_t show_bios_limit(struct cpufreq_policy *policy, char *buf)
+ 	return sprintf(buf, "%u\n", policy->cpuinfo.max_freq);
+ }
+ 
++#ifdef CONFIG_CPU_VOLTAGE_TABLE
++extern ssize_t show_UV_mV_table(struct cpufreq_policy *policy, char *buf);
++extern ssize_t store_UV_mV_table(struct cpufreq_policy *policy, const char *buf, size_t count);
++#endif
++
+ cpufreq_freq_attr_ro_perm(cpuinfo_cur_freq, 0400);
+ cpufreq_freq_attr_ro(cpuinfo_min_freq);
+ cpufreq_freq_attr_ro(cpuinfo_max_freq);
+@@ -855,6 +860,9 @@ cpufreq_freq_attr_rw(scaling_min_freq);
+ cpufreq_freq_attr_rw(scaling_max_freq);
+ cpufreq_freq_attr_rw(scaling_governor);
+ cpufreq_freq_attr_rw(scaling_setspeed);
++#ifdef CONFIG_CPU_VOLTAGE_TABLE
++cpufreq_freq_attr_rw(UV_mV_table);
++#endif
+ 
+ static struct attribute *default_attrs[] = {
+ 	&cpuinfo_min_freq.attr,
+@@ -868,6 +876,9 @@ static struct attribute *default_attrs[] = {
+ 	&scaling_driver.attr,
+ 	&scaling_available_governors.attr,
+ 	&scaling_setspeed.attr,
++#ifdef CONFIG_CPU_VOLTAGE_TABLE
++	&UV_mV_table.attr,
++#endif
+ 	NULL
+ };
+ 
