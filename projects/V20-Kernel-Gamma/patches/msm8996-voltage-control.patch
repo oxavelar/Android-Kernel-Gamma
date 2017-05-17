@@ -1,8 +1,6 @@
 Patch:  MSM8996 User Voltage Scaling that does not depend on qcom-cpufreq.c
 Author: Omar Avelar
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 2da32aff486..ce3b63f3289 100644
 --- a/arch/arm64/Kconfig
 +++ b/arch/arm64/Kconfig
 @@ -332,6 +332,12 @@ config ARCH_MSM8996
@@ -18,8 +16,7 @@ index 2da32aff486..ce3b63f3289 100644
  config ARCH_MSMCOBALT
  	bool "Enable Support for Qualcomm MSMCOBALT"
  	depends on ARCH_MSM
-diff --git a/drivers/clk/msm/clock-cpu-8996.c b/drivers/clk/msm/clock-cpu-8996.c
-index 0e4c11844c4..b2b2bad1c62 100644
+
 --- a/drivers/clk/msm/clock-cpu-8996.c
 +++ b/drivers/clk/msm/clock-cpu-8996.c
 @@ -28,6 +28,10 @@
@@ -33,14 +30,14 @@ index 0e4c11844c4..b2b2bad1c62 100644
  #include <asm/cputype.h>
  
  #include <soc/qcom/scm.h>
-@@ -1066,6 +1070,95 @@ static struct clk_lookup cpu_clocks_8996[] = {
+@@ -1066,6 +1070,102 @@ static struct clk_lookup cpu_clocks_8996[] = {
  	CLK_LIST(cpu_debug_mux),
  };
  
 +#ifdef CONFIG_CPU_VOLTAGE_TABLE
 +
-+#define CPU_VDD_MIN	400
-+#define CPU_VDD_MAX	900
++#define CPU_VDD_MIN	 500
++#define CPU_VDD_MAX	1050
 +
 +static unsigned int cnt;
 +
@@ -58,11 +55,12 @@ index 0e4c11844c4..b2b2bad1c62 100644
 +
 +ssize_t show_UV_mV_table(struct cpufreq_policy *policy, char *buf)
 +{
-+	int i;
++	int i, uv, freq;
 +	ssize_t len = 0;
 +
 +	int cpu = policy->cpu;
 +	struct clk *cpu_clk = logical_cpu_to_clk(cpu);
++	struct regulator *reg = cpu_clk->vdd_class->regulator[0];
 +	int num_levels = cpu_clk->vdd_class->num_levels;
 +
 +	/* Format UV_mv table */
@@ -72,9 +70,12 @@ index 0e4c11844c4..b2b2bad1c62 100644
 +		if (!is_used_by_scaling(cpu_clk->fmax[i] / 1000, cpu))
 +				continue;
 +
-+		/* Read the frequency and microvolt pairs from the clk struct */
-+		len += sprintf(buf + len, "%lu MHz : %u mV\n", cpu_clk->fmax[i] / 1000000,
-+						cpu_clk->vdd_class->vdd_uv[i] / 1000);
++		/* Must extract the information from the corner of the regulator */
++		uv = regulator_list_corner_voltage(reg, cpu_clk->vdd_class->vdd_uv[i]);
++		freq = cpu_clk->fmax[i] / 1000000;
++
++		/* Will only be printing the used frequencies */
++		len += sprintf(buf + len, "%4u MHz : %4u mV\n", freq, uv / 1000);
 +
 +	}
 +
@@ -83,13 +84,14 @@ index 0e4c11844c4..b2b2bad1c62 100644
 +
 +ssize_t store_UV_mV_table(struct cpufreq_policy *policy, char *buf,	size_t count)
 +{
-+	int i;
++	int i, uv_min, uv_max;
 +	ssize_t ret = 0;
-+	unsigned int val;
++	unsigned int val_mv;
 +	char size_cur[16];
 +
 +	int cpu = policy->cpu;
 +	struct clk *cpu_clk = logical_cpu_to_clk(cpu);
++	struct regulator *reg = cpu_clk->vdd_class->regulator[0];
 +	int num_levels = cpu_clk->vdd_class->num_levels;
 +
 +	if (cnt) {
@@ -99,7 +101,7 @@ index 0e4c11844c4..b2b2bad1c62 100644
 +
 +	for (i = 0; i < num_levels; i++) {
 +
-+		ret = sscanf(buf, "%u", &val);
++		ret = sscanf(buf, "%u", &val_mv);
 +		if (!ret)
 +			return -EINVAL;
 +
@@ -108,10 +110,13 @@ index 0e4c11844c4..b2b2bad1c62 100644
 +				continue;
 +
 +		/* Bounds check */
-+		val = min( max((unsigned int)val, (unsigned int)CPU_VDD_MIN), (unsigned int)CPU_VDD_MAX );
++		val_mv = min( max((unsigned int)val_mv, (unsigned int)CPU_VDD_MIN), (unsigned int)CPU_VDD_MAX );
 +
-+		/* Undervolt value is applied to the per cpu clock */
-+		cpu_clk->vdd_class->vdd_uv[i] = val * 1000;
++		/* Picks a range between -10 and +10 from the desired voltage and uses it */
++		uv_min = (val_mv - 10) * 1000;
++		uv_max = (val_mv + 10) * 1000;
++		/* Undervolt value is applied to the corner regulator */
++		regulator_set_voltage(reg, uv_min, uv_max);
 +
 +		/* Non-standard sysfs interface: advance buf */
 +		ret = sscanf(buf, "%s", size_cur);
@@ -121,7 +126,6 @@ index 0e4c11844c4..b2b2bad1c62 100644
 +	}
 +
 +	pr_warn("clock-cpu-8996: User voltage table modified\n"); 
-+
 +	return ret;
 +}
 +#endif
@@ -129,8 +133,7 @@ index 0e4c11844c4..b2b2bad1c62 100644
  static int of_get_fmax_vdd_class(struct platform_device *pdev, struct clk *c,
  								char *prop_name)
  {
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index b373c62dc32..3c20a602c85 100644
+
 --- a/drivers/cpufreq/cpufreq.c
 +++ b/drivers/cpufreq/cpufreq.c
 @@ -841,6 +841,11 @@ static ssize_t show_bios_limit(struct cpufreq_policy *policy, char *buf)
