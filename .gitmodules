@@ -7,3 +7,6 @@
 [submodule "/home/omar/Desktop/tmp/Android-Kernel-Gamma/projects/V20-Kernel-Gamma/kernel"]
 	path = /home/omar/Desktop/tmp/Android-Kernel-Gamma/projects/V20-Kernel-Gamma/kernel
 	url = https://github.com/oxavelar//V20-Kernel-Gamma
+[submodule "/home/user/Android-Kernel-Gamma/projects/V20-Kernel-Gamma/kernel"]
+	path = /home/user/Android-Kernel-Gamma/projects/V20-Kernel-Gamma/kernel
+	url = https://github.com/oxavelar//V20-Kernel-Gamma
