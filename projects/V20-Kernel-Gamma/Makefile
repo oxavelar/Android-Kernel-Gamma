@@ -41,7 +41,7 @@ export ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 ifneq ($(wildcard /usr/bin/arm-none-eabi-disabled),)
     export CROSS_COMPILE := /usr/bin/arm-none-eabi-
 else
-    export CROSS_COMPILE := $(ROOT_DIR)/gcc/linaro-6.3/bin/aarch64-elf-
+    export CROSS_COMPILE := $(ROOT_DIR)/gcc/linaro-6.4/bin/aarch64-elf-
 endif
 export KBUILD_VERBOSE := 0
 
@@ -113,6 +113,7 @@ export KCFLAGS += -Wno-misleading-indentation
 export KCFLAGS += -Wno-tautological-compare
 export KCFLAGS += -Wno-array-bounds
 export KCFLAGS += -fno-use-linker-plugin
+#export KCFLAGS += -Wno-unused-const-variable
 
 ############################################################################
 ########################### KERNEL BUILD STEPS #############################
