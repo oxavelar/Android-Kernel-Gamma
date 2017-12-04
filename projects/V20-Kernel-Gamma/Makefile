@@ -114,6 +114,7 @@ export KCFLAGS += -Wno-tautological-compare
 export KCFLAGS += -Wno-array-bounds
 export KCFLAGS += -fno-use-linker-plugin
 export KCFLAGS += -Wno-unused-const-variable
+export KCFLAGS += -Wno-discarded-array-qualifiers
 
 ############################################################################
 ########################### KERNEL BUILD STEPS #############################
