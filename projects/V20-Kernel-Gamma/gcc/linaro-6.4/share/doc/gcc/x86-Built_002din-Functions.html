@@ -143,7 +143,7 @@ barrier.
 check the target platform type.
 </p>
 <dl>
-<dt><a name="index-_005f_005fbuiltin_005fcpu_005finit-1"></a>Built-in Function: <em>void</em> <strong>__builtin_cpu_init</strong> <em>(void)</em></dt>
+<dt><a name="index-_005f_005fbuiltin_005fcpu_005finit-2"></a>Built-in Function: <em>void</em> <strong>__builtin_cpu_init</strong> <em>(void)</em></dt>
 <dd><p>This function runs the CPU detection code to check the type of CPU and the
 features supported.  This built-in function needs to be invoked along with the built-in functions
 to check CPU type and features, <code>__builtin_cpu_is</code> and
@@ -257,8 +257,12 @@ and returns <code>0</code> otherwise. The following CPU names can be detected:
 <dd><p>AMD Family 16h CPU.
 </p>
 </dd>
-<dt>&lsquo;<samp>znver1</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>amdfam17h</samp>&rsquo;</dt>
 <dd><p>AMD Family 17h CPU.
+</p>
+</dd>
+<dt>&lsquo;<samp>znver1</samp>&rsquo;</dt>
+<dd><p>AMD Family 17h Zen version 1.
 </p></dd>
 </dl>
 
@@ -1454,7 +1458,7 @@ unsigned long long _pext_u64 (unsigned long long, unsigned long long)
 <p>The following built-in functions are available when <samp>-mlzcnt</samp> is used.
 All of them generate the machine instruction that is part of the name.
 </p><div class="smallexample">
-<pre class="smallexample">unsigned short __builtin_ia32_lzcnt_16(unsigned short);
+<pre class="smallexample">unsigned short __builtin_ia32_lzcnt_u16(unsigned short);
 unsigned int __builtin_ia32_lzcnt_u32(unsigned int);
 unsigned long long __builtin_ia32_lzcnt_u64 (unsigned long long);
 </pre></div>

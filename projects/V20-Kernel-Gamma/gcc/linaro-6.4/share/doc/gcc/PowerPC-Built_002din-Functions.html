@@ -87,10 +87,26 @@ to maintain API compatibility with the x86 builtins.
 </p></dd></dl>
 
 <dl>
+<dt><a name="index-_005f_005fbuiltin_005fcpu_005finit-1"></a>Built-in Function: <em>void</em> <strong>__builtin_cpu_init</strong> <em>(void)</em></dt>
+<dd><p>This function is a <code>nop</code> on the PowerPC platform and is included solely
+to maintain API compatibility with the x86 builtins.
+</p></dd></dl>
+
+<dl>
 <dt><a name="index-_005f_005fbuiltin_005fcpu_005fis"></a>Built-in Function: <em>int</em> <strong>__builtin_cpu_is</strong> <em>(const char *<var>cpuname</var>)</em></dt>
 <dd><p>This function returns a value of <code>1</code> if the run-time CPU is of type
-<var>cpuname</var> and returns <code>0</code> otherwise. The following CPU names can be
-detected:
+<var>cpuname</var> and returns <code>0</code> otherwise
+</p>
+<p>The <code>__builtin_cpu_is</code> function requires GLIBC 2.23 or newer
+which exports the hardware capability bits.  GCC defines the macro
+<code>__BUILTIN_CPU_SUPPORTS__</code> if the <code>__builtin_cpu_supports</code>
+built-in function is fully supported.
+</p>
+<p>If GCC was configured to use a GLIBC before 2.23, the built-in
+function <code>__builtin_cpu_is</code> always returns a 0 and the compiler
+issues a warning.
+</p>
+<p>The following CPU names can be detected:
 </p>
 <dl compact="compact">
 <dt>&lsquo;<samp>power9</samp>&rsquo;</dt>
@@ -142,21 +158,34 @@ detected:
 
 <p>Here is an example:
 </p><div class="smallexample">
-<pre class="smallexample">if (__builtin_cpu_is (&quot;power8&quot;))
-  {
-     do_power8 (); // POWER8 specific implementation.
-  }
-else
-  {
-     do_generic (); // Generic implementation.
-  }
+<pre class="smallexample">#ifdef __BUILTIN_CPU_SUPPORTS__
+  if (__builtin_cpu_is (&quot;power8&quot;))
+    {
+       do_power8 (); // POWER8 specific implementation.
+    }
+  else
+#endif
+    {
+       do_generic (); // Generic implementation.
+    }
 </pre></div>
 </dd></dl>
 
 <dl>
 <dt><a name="index-_005f_005fbuiltin_005fcpu_005fsupports"></a>Built-in Function: <em>int</em> <strong>__builtin_cpu_supports</strong> <em>(const char *<var>feature</var>)</em></dt>
 <dd><p>This function returns a value of <code>1</code> if the run-time CPU supports the HWCAP
-feature <var>feature</var> and returns <code>0</code> otherwise. The following features can be
+feature <var>feature</var> and returns <code>0</code> otherwise.
+</p>
+<p>The <code>__builtin_cpu_supports</code> function requires GLIBC 2.23 or
+newer which exports the hardware capability bits.  GCC defines the
+macro <code>__BUILTIN_CPU_SUPPORTS__</code> if the
+<code>__builtin_cpu_supports</code> built-in function is fully supported.
+</p>
+<p>If GCC was configured to use a GLIBC before 2.23, the built-in
+function <code>__builtin_cpu_suports</code> always returns a 0 and the
+compiler issues a warning.
+</p>
+<p>The following features can be
 detected:
 </p>
 <dl compact="compact">
@@ -278,14 +307,16 @@ detected:
 
 <p>Here is an example:
 </p><div class="smallexample">
-<pre class="smallexample">if (__builtin_cpu_supports (&quot;fpu&quot;))
-  {
-     asm(&quot;fadd %0,%1,%2&quot; : &quot;=d&quot;(dst) : &quot;d&quot;(src1), &quot;d&quot;(src2));
-  }
-else
-  {
-     dst = __fadd (src1, src2); // Software FP addition function.
-  }
+<pre class="smallexample">#ifdef __BUILTIN_CPU_SUPPORTS__
+  if (__builtin_cpu_supports (&quot;fpu&quot;))
+    {
+       asm(&quot;fadd %0,%1,%2&quot; : &quot;=d&quot;(dst) : &quot;d&quot;(src1), &quot;d&quot;(src2));
+    }
+  else
+#endif
+    {
+       dst = __fadd (src1, src2); // Software FP addition function.
+    }
 </pre></div>
 </dd></dl>
 

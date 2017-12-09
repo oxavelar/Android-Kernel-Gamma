@@ -293,13 +293,19 @@ sbiw r26, const   ; X -= const
 </dd>
 <dt><code>-nodevicelib</code></dt>
 <dd><a name="index-nodevicelib"></a>
-<p>Don&rsquo;t link against AVR-LibC&rsquo;s device specific library <code>libdev.a</code>.
+<p>Don&rsquo;t link against AVR-LibC&rsquo;s device specific library <code>lib&lt;mcu&gt;.a</code>.
 </p>
 </dd>
 <dt><code>-Waddr-space-convert</code></dt>
 <dd><a name="index-Waddr_002dspace_002dconvert"></a>
 <p>Warn about conversions between address spaces in the case where the
 resulting address space is not contained in the incoming address space.
+</p> 
+</dd>
+<dt><code>-Wmisspelled-isr</code></dt>
+<dd><a name="index-Wmisspelled_002disr"></a>
+<p>Warn if the ISR is misspelled, i.e. without <code>__vector</code> prefix.
+Enabled by default.
 </p></dd>
 </dl>
 
