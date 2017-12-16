@@ -16,7 +16,8 @@
 #
 #                                               Feb 2017 - Omar Avelar
 #
-# Extra info and references taken from: 
+# Extra info and references taken from:
+# https://github.com/aosp-mirror/kernel_common android-3.18
 # https://source.codeaurora.org/external/gigabyte/kernel/msm/log/?h=caf/msm-3.18
 #
 #
