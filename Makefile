@@ -48,7 +48,7 @@ clean:
 menu:
 ifeq ($(wildcard $(KSRC_PATH)/*),)
 	git rm -rf --cached $(KSRC_PATH) || continue
-	git submodule add $(KSRC_HTTP) $(KSRC_PATH)
+	git submodule add --force $(KSRC_HTTP) $(KSRC_PATH)
 endif
 	echo "Select from the list of available projects:"
 
