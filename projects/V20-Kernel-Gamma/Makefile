@@ -21,6 +21,10 @@
 # https://source.codeaurora.org/external/gigabyte/kernel/msm/log/?h=caf/msm-3.18
 #
 #
+# Merging remote tracking from:
+# git pull -s recursive -X theirs https://github.com/LineageOS/android_kernel_lge_msm8996 BRANCH
+# git pull -s recursive -X theirs https://github.com/aosp-mirror/kernel_common android-3.18
+#
 #
 # Extra packages to be used in debian:
 #
