@@ -17,11 +17,13 @@
 #                                               Feb 2017 - Omar Avelar
 #
 # Extra info and references taken from:
-# https://github.com/aosp-mirror/kernel_common android-3.18
+# https://wiki.codeaurora.org/xwiki/bin/QAEP/release
+# https://github.com/aosp-mirror/kernel_common
 # https://source.codeaurora.org/external/gigabyte/kernel/msm/log/?h=caf/msm-3.18
 #
 #
 # Merging remote tracking from:
+# git pull -s recursive -X theirs https://source.codeaurora.org/quic/la/kernel/msm-3.18 BRANCH
 # git pull -s recursive -X theirs https://github.com/LineageOS/android_kernel_lge_msm8996 BRANCH
 # git pull -s recursive -X theirs https://github.com/aosp-mirror/kernel_common android-3.18
 #
