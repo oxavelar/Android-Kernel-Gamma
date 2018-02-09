@@ -1,0 +1,5 @@
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/0e5765770c6523a142e9f90c56ea0c44a8b5dadf
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/dc181d179333200cdd4faca8fced0cd013ce25ba
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/202b8b22662d1efdb16e8371516efba9f9bf079d
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/cc004af4a33d0175c79559c9f2e77757cf912313
+https://github.com/andip71/boeffla-kernel-cm-oneplus3/commit/a3c1ab59ff103bdcb43962d67228542f6ccc8aa7
