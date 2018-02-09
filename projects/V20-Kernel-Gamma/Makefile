@@ -23,8 +23,8 @@
 #
 #
 # Merging remote tracking from:
-# git pull -s recursive -X theirs https://source.codeaurora.org/quic/la/kernel/msm-3.18 LA.UM.6.5.r1-05300-8x96.0
-# git pull -s recursive -X theirs https://github.com/LineageOS/android_kernel_lge_msm8996 LA.UM.6.5.r1-05300-8x96.0
+# git pull -s recursive -X theirs https://source.codeaurora.org/quic/la/kernel/msm-3.18 <TAG_NAME>
+# git pull -s recursive -X theirs https://github.com/LineageOS/android_kernel_lge_msm8996 <TAG_NAME>
 # git pull -s recursive -X theirs https://github.com/aosp-mirror/kernel_common android-3.18
 #
 # Keeping CAF up to date:
