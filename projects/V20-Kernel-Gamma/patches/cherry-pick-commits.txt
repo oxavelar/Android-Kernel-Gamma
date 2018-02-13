@@ -4,3 +4,5 @@ https://github.com/RenderBroken/OP3-LOS-kernel/commit/202b8b22662d1efdb16e837151
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/cc004af4a33d0175c79559c9f2e77757cf912313
 https://github.com/andip71/boeffla-kernel-cm-oneplus3/commit/a3c1ab59ff103bdcb43962d67228542f6ccc8aa7
 https://github.com/USA-RedDragon/kernel_lge_v20/commit/e123bb22590251f7cb689cb3f214738b103e78a4
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/d01e653b7de36a57369784b196388409cc190b2e
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/1087699742c4ea768d7af7658018432ad11aa017
