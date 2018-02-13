@@ -33,17 +33,6 @@
 # git fetch --tags codeaurora
 # git merge <TAG_NAME>
 #
-#
-# Extra packages to be used in debian:
-#
-# sudo dpkg --add-architecture armhf
-# sudo dpkg --add-architecture armel
-# sudo apt-get update
-# sudo apt-get install crossbuild-essential-armhf crossbuild-essential-armel
-
-# sudo apt-get install gcc-arm-none-eabi gcc-arm-none-eabi-source
-# sudo apt-get install linux-libc-dev:armel
-# sudo apt-get install linux-libc-dev:armhf
 
 ############################################################################
 ########################## GLOBAL MAKE ARGUMENTS ###########################
