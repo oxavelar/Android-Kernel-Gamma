@@ -1,3 +1,4 @@
+# General Patches
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/0e5765770c6523a142e9f90c56ea0c44a8b5dadf
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/dc181d179333200cdd4faca8fced0cd013ce25ba
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/202b8b22662d1efdb16e8371516efba9f9bf079d
@@ -6,3 +7,17 @@ https://github.com/andip71/boeffla-kernel-cm-oneplus3/commit/a3c1ab59ff103bdcb43
 https://github.com/USA-RedDragon/kernel_lge_v20/commit/e123bb22590251f7cb689cb3f214738b103e78a4
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/d01e653b7de36a57369784b196388409cc190b2e
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/1087699742c4ea768d7af7658018432ad11aa017
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/8b781715840902e2832c578cddfd133cfdfd119c
+
+# Only with EAS
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/f97199977854708a4ddb2686bbed50e55f65d507
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/44dfca3cdf6ba916ebc7f26b1143d49543cc2618 (1a) RCU Changes
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/676e4574e9fd6b630bf3a399001deb9591f27d06 (2a)
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/87fb8a00769a133a7fbd0a800738e631bbc75519 (3a)
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/f97199977854708a4ddb2686bbed50e55f65d507 (4a)
+
+# Stability backports
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/f890ba6875a3afb8cdf0ee145fcf0040c14e0660
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/f88dc6758d87b7efcc55c582d8b0d843d1090f81
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/db071bfea24294715d1e07db89ef4c620975c167
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/7442ad663534316b8d7ca5e8454a1b5fc6ea6018
