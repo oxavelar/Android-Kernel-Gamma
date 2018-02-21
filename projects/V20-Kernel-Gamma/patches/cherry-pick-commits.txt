@@ -1,4 +1,5 @@
 # General Patches
+https://github.com/LineageOS/android_kernel_lge_msm8996/commit/396a54a8802dc14597b61971a59b975e050e1c34
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/0e5765770c6523a142e9f90c56ea0c44a8b5dadf
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/dc181d179333200cdd4faca8fced0cd013ce25ba
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/202b8b22662d1efdb16e8371516efba9f9bf079d
@@ -8,6 +9,9 @@ https://github.com/USA-RedDragon/kernel_lge_v20/commit/e123bb22590251f7cb689cb3f
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/d01e653b7de36a57369784b196388409cc190b2e
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/1087699742c4ea768d7af7658018432ad11aa017
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/8b781715840902e2832c578cddfd133cfdfd119c
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/5a2aecc96dd8604c3151d42113dee9bd5c3c80fc
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/f624be1a43ea16974d8361f227454a3857e66182
+https://github.com/RenderBroken/OP3-LOS-kernel/commit/2817f36555bf70769dbb7f8055d80c99fbf5339f
 
 # Only with EAS
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/f97199977854708a4ddb2686bbed50e55f65d507
