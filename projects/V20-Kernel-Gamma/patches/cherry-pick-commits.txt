@@ -14,7 +14,6 @@ https://github.com/RenderBroken/OP3-LOS-kernel/commit/f624be1a43ea16974d8361f227
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/2817f36555bf70769dbb7f8055d80c99fbf5339f
 
 # Only with EAS
-https://github.com/RenderBroken/OP3-LOS-kernel/commit/f97199977854708a4ddb2686bbed50e55f65d507
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/44dfca3cdf6ba916ebc7f26b1143d49543cc2618 (1a) RCU Changes
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/676e4574e9fd6b630bf3a399001deb9591f27d06 (2a)
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/87fb8a00769a133a7fbd0a800738e631bbc75519 (3a)
