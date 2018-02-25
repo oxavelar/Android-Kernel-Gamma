@@ -12,6 +12,9 @@ https://github.com/RenderBroken/OP3-LOS-kernel/commit/8b781715840902e2832c578cdd
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/5a2aecc96dd8604c3151d42113dee9bd5c3c80fc
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/f624be1a43ea16974d8361f227454a3857e66182
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/2817f36555bf70769dbb7f8055d80c99fbf5339f
+https://android.googlesource.com/kernel/msm/+/de9c8912956fa74c040f5846a9d349a50bd80894
+https://android.googlesource.com/kernel/msm/+/2ba15e705f3959944586d1a4ff6d2310baabdf96
+https://android.googlesource.com/kernel/msm/+/1dfb7ed9106a84d620b08defa620eb7a05186744
 
 # Only with EAS
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/44dfca3cdf6ba916ebc7f26b1143d49543cc2618 (1a) RCU Changes
