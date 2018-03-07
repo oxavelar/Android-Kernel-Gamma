@@ -27,3 +27,7 @@ https://github.com/RenderBroken/OP3-LOS-kernel/commit/f890ba6875a3afb8cdf0ee145f
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/f88dc6758d87b7efcc55c582d8b0d843d1090f81
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/db071bfea24294715d1e07db89ef4c620975c167
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/7442ad663534316b8d7ca5e8454a1b5fc6ea6018
+
+# Security
+https://github.com/LineageOS/android_kernel_lge_msm8996/commit/83bb3cfab044718ac2f3179c1720fdd617fd25e3
+https://github.com/LineageOS/android_kernel_lge_msm8996/commit/37c8e7f60ed6eedac156d427e785dbfc37fb7937
