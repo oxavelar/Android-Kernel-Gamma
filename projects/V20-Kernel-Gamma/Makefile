@@ -111,7 +111,6 @@ export KCFLAGS += -Wno-misleading-indentation
 export KCFLAGS += -Wno-tautological-compare
 export KCFLAGS += -Wno-array-bounds
 export KCFLAGS += -fno-use-linker-plugin
-export KCFLAGS += -Wno-unused-const-variable
 
 ############################################################################
 ########################### KERNEL BUILD STEPS #############################
