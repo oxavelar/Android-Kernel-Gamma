@@ -120,7 +120,7 @@ export KCFLAGS += -fno-use-linker-plugin
 kernel:
 	mkdir -p "$(KBUILD_OUT_PATH)"
 	$(MAKE) -C "$(KSRC_PATH)" O="$(KBUILD_OUT_PATH)" "$(KDEFCONFIG)"
-	$(MAKE) -C "$(KSRC_PATH)" O="$(KBUILD_OUT_PATH)" CONFIG_NO_ERROR_ON_MISMATCH=y CONFIG_DEBUG_SECTION_MISMATCH=y KCFLAGS+="$(KCFLAGS)" Image.gz-dtb
+	$(MAKE) -C "$(KSRC_PATH)" O="$(KBUILD_OUT_PATH)" CONFIG_NO_ERROR_ON_MISMATCH=y CONFIG_DEBUG_SECTION_MISMATCH=y Image.gz-dtb
 	cp -f "$(KBUILD_OUT_PATH)/arch/$(ARCH)/boot/Image.gz-dtb" "$(OUT_PATH)/Image.gz-dtb"
 
 .PHONY: modules
@@ -128,7 +128,7 @@ modules:
 	# General modules from the kernel
 	mkdir -p "$(MBUILD_OUT_PATH)"
 	$(MAKE) -C "$(KSRC_PATH)" O="$(MBUILD_OUT_PATH)" "$(KDEFCONFIG)"
-	$(MAKE) -C "$(KSRC_PATH)" O="$(MBUILD_OUT_PATH)" KCFLAGS+="$(KCFLAGS)" modules
+	$(MAKE) -C "$(KSRC_PATH)" O="$(MBUILD_OUT_PATH)" modules
 	# Copy the created modules to the ramdisk path and strip debug symbols
 	find "$(MBUILD_OUT_PATH)" -iname *.ko -exec cp -f \{\} "$(OUT_PATH)/lib/modules/" \;
 	strip --strip-debug --strip-unneeded --remove-section=.comment --remove-section=.note "$(OUT_PATH)/lib/modules/*.*o"
