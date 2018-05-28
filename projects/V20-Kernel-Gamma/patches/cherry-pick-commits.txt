@@ -1,6 +1,5 @@
 # General Patches
 https://github.com/LineageOS/android_kernel_lge_msm8996/commit/396a54a8802dc14597b61971a59b975e050e1c34
-https://github.com/RenderBroken/OP3-LOS-kernel/commit/0e5765770c6523a142e9f90c56ea0c44a8b5dadf
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/dc181d179333200cdd4faca8fced0cd013ce25ba
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/202b8b22662d1efdb16e8371516efba9f9bf079d
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/cc004af4a33d0175c79559c9f2e77757cf912313
@@ -12,21 +11,10 @@ https://github.com/RenderBroken/OP3-LOS-kernel/commit/8b781715840902e2832c578cdd
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/5a2aecc96dd8604c3151d42113dee9bd5c3c80fc
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/f624be1a43ea16974d8361f227454a3857e66182
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/2817f36555bf70769dbb7f8055d80c99fbf5339f
-https://android.googlesource.com/kernel/msm/+/de9c8912956fa74c040f5846a9d349a50bd80894
-https://android.googlesource.com/kernel/msm/+/2ba15e705f3959944586d1a4ff6d2310baabdf96
-https://android.googlesource.com/kernel/msm/+/1dfb7ed9106a84d620b08defa620eb7a05186744
-
-# Only with EAS
-https://github.com/RenderBroken/OP3-LOS-kernel/commit/44dfca3cdf6ba916ebc7f26b1143d49543cc2618 (1a) RCU Changes
-https://github.com/RenderBroken/OP3-LOS-kernel/commit/676e4574e9fd6b630bf3a399001deb9591f27d06 (2a)
-https://github.com/RenderBroken/OP3-LOS-kernel/commit/87fb8a00769a133a7fbd0a800738e631bbc75519 (3a)
-https://github.com/RenderBroken/OP3-LOS-kernel/commit/f97199977854708a4ddb2686bbed50e55f65d507 (4a)
+https://github.com/franciscofranco/marlin/commit/d1b6fd4bf263c8ec26a26638d4802f87a23de31e
 
 # Stability backports
 https://github.com/RenderBroken/OP3-LOS-kernel/commit/f890ba6875a3afb8cdf0ee145fcf0040c14e0660
-https://github.com/RenderBroken/OP3-LOS-kernel/commit/f88dc6758d87b7efcc55c582d8b0d843d1090f81
-https://github.com/RenderBroken/OP3-LOS-kernel/commit/db071bfea24294715d1e07db89ef4c620975c167
-https://github.com/RenderBroken/OP3-LOS-kernel/commit/7442ad663534316b8d7ca5e8454a1b5fc6ea6018
 
 # Security
 https://github.com/LineageOS/android_kernel_lge_msm8996/commit/83bb3cfab044718ac2f3179c1720fdd617fd25e3
