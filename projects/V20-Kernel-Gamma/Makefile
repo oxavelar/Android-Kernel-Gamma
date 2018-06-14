@@ -40,7 +40,7 @@
 
 export ARCH := arm64
 export ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-export CROSS_COMPILE := $(ROOT_DIR)/gcc/linaro-6.4/bin/aarch64-linux-gnu-
+export CROSS_COMPILE := $(ROOT_DIR)/gcc/linaro-4.9/bin/aarch64-linux-gnu-
 export KBUILD_VERBOSE := 0
 
 ############################################################################
@@ -60,7 +60,7 @@ DBUILD_OUT_PATH = $(OUT_PATH)/dbuild
 ############################################################################
 
 export QCOM_S820 := \
-        -march=armv8.1-a+crc+crypto \
+        -march=armv8-a+crc+crypto \
         -mtune=cortex-a72 \
         --param l1-cache-line-size=64 \
         --param l1-cache-size=32 \
