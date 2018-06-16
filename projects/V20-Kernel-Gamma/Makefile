@@ -56,12 +56,12 @@ DBUILD_OUT_PATH = $(OUT_PATH)/dbuild
 
 
 ############################################################################
-############## KERNEL OPTIMIZATION FLAGS FOR THE QCOM S801 #################
+############## KERNEL OPTIMIZATION FLAGS FOR THE QCOM S820 #################
 ############################################################################
 
 export QCOM_S820 := \
         -march=armv8.1-a+simd+crc+crypto \
-        -mtune=cortex-a72 \
+        -mtune=cortex-a53 \
         --param l1-cache-line-size=64 \
         --param l1-cache-size=32 \
         --param l2-cache-size=512 \
@@ -120,7 +120,7 @@ export KCFLAGS += -fno-use-linker-plugin
 kernel:
 	mkdir -p "$(KBUILD_OUT_PATH)"
 	$(MAKE) -C "$(KSRC_PATH)" O="$(KBUILD_OUT_PATH)" "$(KDEFCONFIG)"
-	$(MAKE) -C "$(KSRC_PATH)" O="$(KBUILD_OUT_PATH)" CONFIG_NO_ERROR_ON_MISMATCH=y CONFIG_DEBUG_SECTION_MISMATCH=y Image.gz-dtb
+	$(MAKE) -C "$(KSRC_PATH)" O="$(KBUILD_OUT_PATH)" CONFIG_NO_ERROR_ON_MISMATCH=y Image.gz-dtb
 	cp -f "$(KBUILD_OUT_PATH)/arch/$(ARCH)/boot/Image.gz-dtb" "$(OUT_PATH)/Image.gz-dtb"
 
 .PHONY: modules
