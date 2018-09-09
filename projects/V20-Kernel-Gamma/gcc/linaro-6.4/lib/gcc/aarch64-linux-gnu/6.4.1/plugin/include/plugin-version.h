@@ -6,9 +6,9 @@
 #define GCCPLUGIN_VERSION  (GCCPLUGIN_VERSION_MAJOR*1000 + GCCPLUGIN_VERSION_MINOR)
 
 static char basever[] = "6.4.1";
-static char datestamp[] = "20171012";
+static char datestamp[] = "20180425";
 static char devphase[] = "";
-static char revision[] = "";
+static char revision[] = "[linaro-6.4-2018.05 revision 7b15d0869c096fe39603ad63dc19ab7cf035eb70]";
 
 /* FIXME plugins: We should make the version information more precise.
    One way to do is to add a checksum. */

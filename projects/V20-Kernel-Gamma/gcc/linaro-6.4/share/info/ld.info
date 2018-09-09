@@ -1,6 +1,6 @@
 This is ld.info, produced by makeinfo version 5.2 from ld.texinfo.
 
-This file documents the GNU linker LD (Linaro_Binutils-2017.11) version
+This file documents the GNU linker LD (Linaro_Binutils-2018.05) version
 2.27.0.
 
    Copyright (C) 1991-2016 Free Software Foundation, Inc.
@@ -22,7 +22,7 @@ File: ld.info,  Node: Top,  Next: Overview,  Up: (dir)
 LD
 **
 
-This file documents the GNU linker ld (Linaro_Binutils-2017.11) version
+This file documents the GNU linker ld (Linaro_Binutils-2018.05) version
 2.27.0.
 
    This document is distributed under the terms of the GNU Free

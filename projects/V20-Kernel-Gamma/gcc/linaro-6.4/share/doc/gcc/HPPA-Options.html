@@ -101,6 +101,15 @@ other way around.
 <p>Synonyms for <samp>-march=1.0</samp>, <samp>-march=1.1</samp>, and <samp>-march=2.0</samp> respectively.
 </p>
 </dd>
+<dt><code>-mcaller-copies</code></dt>
+<dd><a name="index-mcaller_002dcopies"></a>
+<p>The caller copies function arguments passed by hidden reference.  This
+option should be used with care as it is not compatible with the default
+32-bit runtime.  However, only aggregates larger than eight bytes are
+passed by hidden reference and the option provides better compatibility
+with OpenMP.
+</p>
+</dd>
 <dt><code>-mjump-in-delay</code></dt>
 <dd><a name="index-mjump_002din_002ddelay"></a>
 <p>This option is ignored and provided for compatibility purposes only.

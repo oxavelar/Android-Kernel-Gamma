@@ -133,7 +133,7 @@
 .\" ========================================================================
 .\"
 .IX Title "GCC 1"
-.TH GCC 1 "2017-10-12" "gcc-6.4.1" "GNU"
+.TH GCC 1 "2018-04-25" "gcc-6.4.1" "GNU"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -757,7 +757,7 @@ in the following sections.
 .Sp
 \&\fI\s-1HPPA\s0 Options\fR
 \&\fB\-march=\fR\fIarchitecture-type\fR 
-\&\fB\-mdisable\-fpregs  \-mdisable\-indexing 
+\&\fB\-mcaller\-copies  \-mdisable\-fpregs  \-mdisable\-indexing 
 \&\-mfast\-indirect\-calls  \-mgas  \-mgnu\-ld   \-mhp\-ld 
 \&\-mfixed\-range=\fR\fIregister-range\fR 
 \&\fB\-mjump\-in\-delay \-mlinker\-opt \-mlong\-calls 
@@ -1005,7 +1005,7 @@ See \s-1RS/6000\s0 and PowerPC Options.
 \&\-mfloat\-gprs=yes  \-mfloat\-gprs=no \-mfloat\-gprs=single \-mfloat\-gprs=double 
 \&\-mprototype  \-mno\-prototype 
 \&\-msim  \-mmvme  \-mads  \-myellowknife  \-memb  \-msdata 
-\&\-msdata=\fR\fIopt\fR  \fB\-mvxworks  \-G\fR \fInum\fR  \fB\-pthread 
+\&\-msdata=\fR\fIopt\fR  \fB\-mreadonly\-in\-sdata  \-mvxworks  \-G\fR \fInum\fR  \fB\-pthread 
 \&\-mrecip \-mrecip=\fR\fIopt\fR \fB\-mno\-recip \-mrecip\-precision 
 \&\-mno\-recip\-precision 
 \&\-mveclibabi=\fR\fItype\fR \fB\-mfriz \-mno\-friz 
@@ -1184,7 +1184,8 @@ See \s-1RS/6000\s0 and PowerPC Options.
 \&\fB\-msse2avx \-mfentry \-mrecord\-mcount \-mnop\-mcount \-m8bit\-idiv 
 \&\-mavx256\-split\-unaligned\-load \-mavx256\-split\-unaligned\-store 
 \&\-malign\-data=\fR\fItype\fR \fB\-mstack\-protector\-guard=\fR\fIguard\fR 
-\&\fB\-mmitigate\-rop\fR
+\&\fB\-mmitigate\-rop \-mindirect\-branch=\fR\fIchoice\fR 
+\&\fB\-mfunction\-return=\fR\fIchoice\fR \fB\-mindirect\-branch\-register\fR
 .Sp
 \&\fIx86 Windows Options\fR
 \&\fB\-mconsole \-mcygwin \-mno\-cygwin \-mdll 
@@ -6605,7 +6606,7 @@ This flag is enabled by default at \fB\-O2\fR and higher and depends on
 \&\fB\-fdelete\-null\-pointer\-checks\fR also being enabled.
 .IP "\fB\-fisolate\-erroneous\-paths\-attribute\fR" 4
 .IX Item "-fisolate-erroneous-paths-attribute"
-Detect paths that trigger erroneous or undefined behavior due a null value
+Detect paths that trigger erroneous or undefined behavior due to a null value
 being used in a way forbidden by a \f(CW\*(C`returns_nonnull\*(C'\fR or \f(CW\*(C`nonnull\*(C'\fR
 attribute.  Isolate those paths from the main control flow and turn the
 statement with erroneous or undefined behavior into a trap.  This is not
@@ -7119,6 +7120,7 @@ Some assemblers only support this flag when \fIn\fR is a power of two;
 in that case, it is rounded up.
 .Sp
 If \fIn\fR is not specified or is zero, use a machine-dependent default.
+The maximum allowed \fIn\fR option value is 65536.
 .Sp
 Enabled at levels \fB\-O2\fR, \fB\-O3\fR.
 .IP "\fB\-falign\-labels\fR" 4
@@ -7140,6 +7142,7 @@ are greater than this value, then their values are used instead.
 .Sp
 If \fIn\fR is not specified or is zero, use a machine-dependent default
 which is very likely to be \fB1\fR, meaning no alignment.
+The maximum allowed \fIn\fR option value is 65536.
 .Sp
 Enabled at levels \fB\-O2\fR, \fB\-O3\fR.
 .IP "\fB\-falign\-loops\fR" 4
@@ -7155,6 +7158,7 @@ operations.
 .Sp
 \&\fB\-fno\-align\-loops\fR and \fB\-falign\-loops=1\fR are
 equivalent and mean that loops are not aligned.
+The maximum allowed \fIn\fR option value is 65536.
 .Sp
 If \fIn\fR is not specified or is zero, use a machine-dependent default.
 .Sp
@@ -7174,6 +7178,7 @@ need be executed.
 equivalent and mean that loops are not aligned.
 .Sp
 If \fIn\fR is not specified or is zero, use a machine-dependent default.
+The maximum allowed \fIn\fR option value is 65536.
 .Sp
 Enabled at levels \fB\-O2\fR, \fB\-O3\fR.
 .IP "\fB\-funit\-at\-a\-time\fR" 4
@@ -8935,9 +8940,9 @@ Link your object files with \fB\-lgcov\fR or \fB\-fprofile\-arcs\fR
 Run the program on a representative workload to generate the arc profile
 information.  This may be repeated any number of times.  You can run
 concurrent instances of your program, and provided that the file system
-supports locking, the data files will be correctly updated.  Also
-\&\f(CW\*(C`fork\*(C'\fR calls are detected and correctly handled (double counting
-will not happen).
+supports locking, the data files will be correctly updated.  Unless
+a strict \s-1ISO C\s0 dialect option is in effect, \f(CW\*(C`fork\*(C'\fR calls are
+detected and correctly handled without double counting.
 .IP "*" 4
 For profile-directed optimizations, compile the source files again with
 the same optimization and code generation options plus
@@ -15723,6 +15728,13 @@ other way around.
 .IX Item "-mpa-risc-2-0"
 .PD
 Synonyms for \fB\-march=1.0\fR, \fB\-march=1.1\fR, and \fB\-march=2.0\fR respectively.
+.IP "\fB\-mcaller\-copies\fR" 4
+.IX Item "-mcaller-copies"
+The caller copies function arguments passed by hidden reference.  This
+option should be used with care as it is not compatible with the default
+32\-bit runtime.  However, only aggregates larger than eight bytes are
+passed by hidden reference and the option provides better compatibility
+with OpenMP.
 .IP "\fB\-mjump\-in\-delay\fR" 4
 .IX Item "-mjump-in-delay"
 This option is ignored and provided for compatibility purposes only.
@@ -19994,6 +20006,14 @@ other \fB\-msdata\fR options are used.
 On embedded PowerPC systems, put all initialized global and static data
 in the \f(CW\*(C`.data\*(C'\fR section, and all uninitialized data in the
 \&\f(CW\*(C`.bss\*(C'\fR section.
+.IP "\fB\-mreadonly\-in\-sdata\fR" 4
+.IX Item "-mreadonly-in-sdata"
+.PD 0
+.IP "\fB\-mreadonly\-in\-sdata\fR" 4
+.IX Item "-mreadonly-in-sdata"
+.PD
+Put read-only objects in the \f(CW\*(C`.sdata\*(C'\fR section as well.  This is the
+default.
 .IP "\fB\-mblock\-move\-inline\-limit=\fR\fInum\fR" 4
 .IX Item "-mblock-move-inline-limit=num"
 Inline all block moves (such as calls to \f(CW\*(C`memcpy\*(C'\fR or structure
@@ -22773,8 +22793,8 @@ preferred alignment to \fB\-mpreferred\-stack\-boundary=2\fR.
 .IX Item "-maes"
 .IP "\fB\-mpclmul\fR" 4
 .IX Item "-mpclmul"
-.IP "\fB\-mclfushopt\fR" 4
-.IX Item "-mclfushopt"
+.IP "\fB\-mclflushopt\fR" 4
+.IX Item "-mclflushopt"
 .IP "\fB\-mfsgsbase\fR" 4
 .IX Item "-mfsgsbase"
 .IP "\fB\-mrdrnd\fR" 4
@@ -23339,6 +23359,38 @@ Try to avoid generating code sequences that contain unintended return
 opcodes, to mitigate against certain forms of attack. At the moment,
 this option is limited in what it can do and should not be relied
 on to provide serious protection.
+.IP "\fB\-mindirect\-branch=\fR\fIchoice\fR" 4
+.IX Item "-mindirect-branch=choice"
+Convert indirect call and jump with \fIchoice\fR.  The default is
+\&\fBkeep\fR, which keeps indirect call and jump unmodified.
+\&\fBthunk\fR converts indirect call and jump to call and return thunk.
+\&\fBthunk-inline\fR converts indirect call and jump to inlined call
+and return thunk.  \fBthunk-extern\fR converts indirect call and jump
+to external call and return thunk provided in a separate object file.
+You can control this behavior for a specific function by using the
+function attribute \f(CW\*(C`indirect_branch\*(C'\fR.
+.Sp
+Note that \fB\-mcmodel=large\fR is incompatible with
+\&\fB\-mindirect\-branch=thunk\fR nor
+\&\fB\-mindirect\-branch=thunk\-extern\fR since the thunk function may
+not be reachable in large code model.
+.IP "\fB\-mfunction\-return=\fR\fIchoice\fR" 4
+.IX Item "-mfunction-return=choice"
+Convert function return with \fIchoice\fR.  The default is \fBkeep\fR,
+which keeps function return unmodified.  \fBthunk\fR converts function
+return to call and return thunk.  \fBthunk-inline\fR converts function
+return to inlined call and return thunk.  \fBthunk-extern\fR converts
+function return to external call and return thunk provided in a separate
+object file.  You can control this behavior for a specific function by
+using the function attribute \f(CW\*(C`function_return\*(C'\fR.
+.Sp
+Note that \fB\-mcmodel=large\fR is incompatible with
+\&\fB\-mfunction\-return=thunk\fR nor
+\&\fB\-mfunction\-return=thunk\-extern\fR since the thunk function may
+not be reachable in large code model.
+.IP "\fB\-mindirect\-branch\-register\fR" 4
+.IX Item "-mindirect-branch-register"
+Force indirect call and jump via register.
 .PP
 These \fB\-m\fR switches are supported in addition to the above
 on x86\-64 processors in 64\-bit environments.

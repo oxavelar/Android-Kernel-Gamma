@@ -737,7 +737,7 @@ Objective-C and Objective-C++ Dialects</a>.
 <p><em>HPPA Options</em>
 </p><div class="smallexample">
 <pre class="smallexample">-march=<var>architecture-type</var> 
--mdisable-fpregs  -mdisable-indexing 
+-mcaller-copies  -mdisable-fpregs  -mdisable-indexing 
 -mfast-indirect-calls  -mgas  -mgnu-ld   -mhp-ld 
 -mfixed-range=<var>register-range</var> 
 -mjump-in-delay -mlinker-opt -mlong-calls 
@@ -1025,7 +1025,7 @@ See RS/6000 and PowerPC Options.
 -mfloat-gprs=yes  -mfloat-gprs=no -mfloat-gprs=single -mfloat-gprs=double 
 -mprototype  -mno-prototype 
 -msim  -mmvme  -mads  -myellowknife  -memb  -msdata 
--msdata=<var>opt</var>  -mvxworks  -G <var>num</var>  -pthread 
+-msdata=<var>opt</var>  -mreadonly-in-sdata  -mvxworks  -G <var>num</var>  -pthread 
 -mrecip -mrecip=<var>opt</var> -mno-recip -mrecip-precision 
 -mno-recip-precision 
 -mveclibabi=<var>type</var> -mfriz -mno-friz 
@@ -1236,7 +1236,8 @@ See RS/6000 and PowerPC Options.
 -msse2avx -mfentry -mrecord-mcount -mnop-mcount -m8bit-idiv 
 -mavx256-split-unaligned-load -mavx256-split-unaligned-store 
 -malign-data=<var>type</var> -mstack-protector-guard=<var>guard</var> 
--mmitigate-rop
+-mmitigate-rop -mindirect-branch=<var>choice</var> 
+-mfunction-return=<var>choice</var> -mindirect-branch-register
 </pre></div>
 
 <p><em>x86 Windows Options</em>
