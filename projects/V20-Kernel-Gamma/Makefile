@@ -61,7 +61,8 @@ DBUILD_OUT_PATH = $(OUT_PATH)/dbuild
 
 export QCOM_S820 := \
         -march=armv8.1-a+simd+crc+crypto \
-        -mtune=cortex-a72 \
+        -mtune=cortex-a57 \
+		-mabi=lp64 \
         --param l1-cache-line-size=64 \
         --param l1-cache-size=32 \
         --param l2-cache-size=512 \
@@ -95,19 +96,16 @@ export KCFLAGS := \
         -ftree-loop-distribute-patterns \
         -ftree-loop-im \
         -ftree-loop-if-convert \
-        -ftree-loop-if-convert-stores \
         -fpredictive-commoning \
         -foptimize-register-move \
         -fipa-cp-clone \
         -fipa-pta \
-        -fmodulo-sched \
-        -fmodulo-sched-allow-regmoves \
+        -fsplit-paths \
         $(QCOM_S820) \
         $(GRAPHITE_FLAGS) \
 
 export KCFLAGS += -Wno-maybe-uninitialized
 export LDFLAGS += -O2 --hash-style=gnu --as-needed -flto
-
 export KCFLAGS += -Wno-misleading-indentation
 export KCFLAGS += -Wno-tautological-compare
 export KCFLAGS += -Wno-array-bounds
