@@ -101,13 +101,11 @@ export KCFLAGS := \
         -ftree-loop-distribute-patterns \
         -ftree-loop-im \
         -ftree-loop-if-convert \
-        -ftree-loop-if-convert-stores \
         -fpredictive-commoning \
         -foptimize-register-move \
         -fipa-cp-clone \
         -fipa-pta \
-        -fmodulo-sched \
-        -fmodulo-sched-allow-regmoves \
+        -fsplit-paths \
         $(QCOM_S801) \
         $(GRAPHITE_FLAGS) \
 
