@@ -69,14 +69,13 @@ export QCOM_S820 := \
 
 export GRAPHTIE_FLAGS := \
         -fgraphite-identity \
-        -ftree-loop-linear \
+        -floop-nest-optimize \
         -floop-interchange \
-        -floop-strip-mine \
-        -floop-block \
 
 export KCFLAGS := \
         -pipe \
         -O2 \
+        -g0 \
         -flto \
         -finline-functions \
         -fomit-frame-pointer \
