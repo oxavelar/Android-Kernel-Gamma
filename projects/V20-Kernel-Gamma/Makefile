@@ -61,7 +61,7 @@ DBUILD_OUT_PATH = $(OUT_PATH)/dbuild
 
 export QCOM_S820 := \
         -march=armv8.1-a+simd+crc+crypto \
-        -mtune=cortex-a57 \
+        -mtune=cortex-a57.cortex-a53 \
 		-mabi=lp64 \
         --param l1-cache-line-size=64 \
         --param l1-cache-size=32 \
@@ -69,14 +69,13 @@ export QCOM_S820 := \
 
 export GRAPHTIE_FLAGS := \
         -fgraphite-identity \
-        -ftree-loop-linear \
+        -floop-nest-optimize \
         -floop-interchange \
-        -floop-strip-mine \
-        -floop-block \
 
 export KCFLAGS := \
         -pipe \
         -O2 \
+        -g0 \
         -flto \
         -finline-functions \
         -fomit-frame-pointer \
