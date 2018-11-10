@@ -61,7 +61,7 @@ DBUILD_OUT_PATH = $(OUT_PATH)/dbuild
 
 export QCOM_S820 := \
         -march=armv8.1-a+simd+crc+crypto \
-        -mtune=cortex-a57 \
+        -mtune=cortex-a57.cortex-a53 \
 		-mabi=lp64 \
         --param l1-cache-line-size=64 \
         --param l1-cache-size=32 \
