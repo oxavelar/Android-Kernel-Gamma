@@ -90,7 +90,6 @@ export KCFLAGS := \
         -fgcse-after-reload \
         -fivopts \
         -fsection-anchors \
-        -fsched-spec-load \
         -ftree-loop-distribution \
         -ftree-loop-distribute-patterns \
         -ftree-loop-im \
