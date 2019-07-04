@@ -40,7 +40,7 @@
 
 export ARCH := arm64
 export ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-export CROSS_COMPILE := $(ROOT_DIR)/gcc/linaro-6.4/bin/aarch64-linux-gnu-
+export CROSS_COMPILE := $(ROOT_DIR)/gcc/linaro-8.3/bin/aarch64-linux-gnu-
 export KBUILD_VERBOSE := 0
 
 ############################################################################
@@ -108,6 +108,16 @@ export KCFLAGS += -Wno-misleading-indentation
 export KCFLAGS += -Wno-tautological-compare
 export KCFLAGS += -Wno-array-bounds
 export KCFLAGS += -fno-use-linker-plugin
+export KCFLAGS += -Wno-packed-not-aligned
+export KCFLAGS += -Wno-attribute-alias
+export KCFLAGS += -Wno-stringop-truncation
+export KCFLAGS += -Wno-sizeof-pointer-memaccess
+export KCFLAGS += -Wno-stringop-overflow
+export KCFLAGS += -Wno-duplicate-decl-specifier
+export KCFLAGS += -Wno-parentheses
+export KCFLAGS += -Wno-sizeof-pointer-div
+export KCFLAGS += -Wno-memset-elt-size
+export KCFLAGS += -Wno-bool-operation
 
 ############################################################################
 ########################### KERNEL BUILD STEPS #############################
